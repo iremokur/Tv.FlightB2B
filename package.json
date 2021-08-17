@@ -1,0 +1,17 @@
+{
+  "name": "flightb2b",
+  "version": "1.0.0",
+  "description": "Flight B2B for Tour",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "^1.4.1",
+    "grunt-cli": "^1.4.3",
+    "ncp": "^2.0.0",
+    "node": "^16.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "irem okur",
+  "license": "ISC"
+}

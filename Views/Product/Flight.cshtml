@@ -1,0 +1,126 @@
+﻿@model Flightb2b.Models.FlightModel
+
+@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Flight</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body class="w3-light-grey">
+
+    <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+        <div class="w3-display-container" >
+            <div class="w3-bar w3-light-grey">
+                <button class="btn btn-primary" onclick="openLink(event, 'FlightOneway');"><i class="fa fa-plane margin-right"></i>Oneway</button>
+                <button class="btn btn-primary" onclick="openLink(event, 'FlightRoundtrip');"><i class="fa fa-plane margin-right"></i>Roundtrip</button>
+                <button class="btn btn-primary" onclick="openLink(event, 'FlightMultiC');"><i class="fa fa-plane margin-right"></i>Multi City</button>
+
+            </div>
+            <br />
+            <!-- Tab ONEWAY -->
+            <div id="FlightOneway" class="w3-container w3-white w3-padding-16 myLink">
+                <div class="col-md-4">
+                    <form id="flightSearchForm" class="form" action="Flight" method="post" autocomplete="off">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="w3-row-padding" style="margin:0 -16px;">
+                            <div class="w3-half w3-margin-bottom">
+                                <input id="Departure" list="dep" for="Departure" class="fa fa-plane form-control" placeholder="From" />
+                                <datalist id="dep">
+                                    <label>City</label>
+                                    <option id="depresultcity"></option>
+                                    <label>Flight</label>
+                                    <option id="depresultflight"></option>
+                                </datalist>
+                            </div>
+                            <div class="w3-half">
+                                <input id="Arrival" name="" list="arr" for="Arrival" class="fa fa-plane form-control" placeholder="To" />
+                                <datalist id="arr">
+                                    <label>City</label>
+                                    <option id="arrresultcity"></option>
+                                    <label>Flight</label>
+                                    <option id="arrresultflight"></option>
+                                </datalist>
+                            </div>
+                        </div>
+                        <div class="w3-row-padding" style="margin:8px -16px;">
+                            <div class="w3-half w3-margin-bottom">
+                                <label>Departure Date</label>
+                                <input type="date" id="checkin" name="checkin">
+                            </div>
+                            <div class="w3-half">
+                                <label for="checkout">Return Date</label>
+                                <input type="date" id="checkout" name="checkout" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><i></i> Flight Class</label>
+                            <select class="form-control">
+                                <option selected>All</option>
+                                <option>Promo</option>
+                                <option>Economy</option>
+                                <option>Business</option>
+                            </select>
+
+                            <label><i></i>Currency</label>
+                            <select class="form-control">
+                                <option selected>EUR</option>
+                                <option>TRY</option>
+                                <option>USD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa fa-male"></i> Adults</label>
+                            <input class="w3-input w3-border" type="number" value="1" name="Adults" min="0" max="9">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa fa-child"></i> Child</label>
+                            <input class="w3-input w3-border" type="number" value="0" name="Kids" min="0" max="9">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" id="searchBtn" value="Search Flight" class="btn btn-primary" />
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
+    <script src="~/js/flight.js"></script>
+    <script src="~/js/getArrivalAutoComplete.js"></script>
+    <script src="~/js/getCheckInDate.js"></script>
+    <script src="~/js/getDepartureAutocomplete.js"></script>
+    <script src="~/js/AutoComplete.js"></script>
+
+    @*<script>
+            $('#logoutBtn').click(function () {
+
+                window.localStorage.removeItem('Token');
+                window.location.href = '@Url.Action("Index", "Home")';
+            });
+
+        </script>*@
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+
+</body>
+    </html>

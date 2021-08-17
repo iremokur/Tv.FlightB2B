@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+
+  
+</head>
+<body>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+            
+            var tok = localStorage.getItem("Token");
+            if (tok == null || tok == undefined || tok =='')
+            {
+                 window.location.href = '@Url.Action("Login", "Account")';
+            }
+            else
+            {
+                window.location.href = '@Url.Action("Flight", "Product")';
+            }
+
+    </script>
+</body>
+</html>

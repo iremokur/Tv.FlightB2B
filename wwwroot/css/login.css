@@ -1,0 +1,11 @@
+﻿* {
+    align-items: center;
+    justify-content: center;
+}
+
+.body {
+    align-items: center;
+    justify-content: center;
+    border: 2px blue;
+    padding: 20px;
+}

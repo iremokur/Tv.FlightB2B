@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AuthUtilities\**" />
+    <Compile Remove="Utilities\**" />
+    <Content Remove="AuthUtilities\**" />
+    <Content Remove="Utilities\**" />
+    <EmbeddedResource Remove="AuthUtilities\**" />
+    <EmbeddedResource Remove="Utilities\**" />
+    <None Remove="AuthUtilities\**" />
+    <None Remove="Utilities\**" />
+    <TypeScriptCompile Remove="AuthUtilities\**" />
+    <TypeScriptCompile Remove="Utilities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="angularjs" Version="1.8.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\tv.b2b.v2-git\TourVisio.WebService.Client\TourVisio.WebService.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="Controllers\NewFolder\" />
+  </ItemGroup>
+
+</Project>
