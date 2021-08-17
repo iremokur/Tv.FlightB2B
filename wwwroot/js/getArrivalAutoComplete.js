@@ -1,5 +1,4 @@
-﻿/// <reference path="AutoComplete.js" />
-/// <reference path="getcheckindate.js" />
+﻿/// <reference path="getcheckindate.js" />
 /// <reference path="getDepartureAutoComplete.js" />
 /// <reference path="flight.js" />
 
@@ -54,46 +53,59 @@ function getArrivalAutoComplete(depbody) {
             });
         }
     });
+    $('#Arrival').on('input', function () {
+        var searchArr = $(this).val();
+        $("#arr").find("option").each(function () {
+            var search = $(this).val();
 
-    $(document).ready(function () {
-        $('#Arrival').on('input', function () {
-            var searchArr = $(this).val();
-            var selectedBodyar;
-            $("#arr").find("option").each(function () {
-                if ($(this).val() == searchArr) {
-                    var request = {
-                        "currency": "EUR", "culture": "tr-TR", "query": searchArr, "productType": 3, "serviceType": "2",
-                        "departureLocations": [{ depbody }]
-                    }
-                    isSelected = true;
-                   
-                    $.ajax({
-                        type: "POST",
-                        url: "https://t3-services.tourvisio.com/v2/api/productservice/getarrivalautocomplete",
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem("Token")//using bearer token! that's why!
-                        },
-                        error: (result) => $.Notification.error(result),
-                        dataType: 'json',
-                        data: JSON.stringify(request),
-                        success: function (result) {
-                            var myJSON = JSON.stringify(result);
-                            var response = JSON.parse(myJSON);
-                            if (response["header"].success) {
-                                var loc = response['body'].items;
-                                $.each(loc, function (i) {
-                                    if (isSelected == true) {
+            if (search == searchArr) {
+
+                isSelected = true;
+                getSelectedArrival(searchArr, depbody);
+            }
+        });
+
+    });
+}
+function getSelectedArrival(searchArr,depbody) {
+
+
+        var selectedBodyar;
+        var request = {
+                "currency": "EUR", "culture": "tr-TR", "query": searchArr, "productType": 3, "serviceType": "2",
+                "departureLocations": [{ depbody }]
+        }
+        $.ajax({
+            type: "POST",
+             url: "https://t3-services.tourvisio.com/v2/api/productservice/getarrivalautocomplete",
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("Token")//using bearer token! that's why!
+                    },
+                    error: (result) => $.Notification.error(result),
+                    dataType: 'json',
+                    data: JSON.stringify(request),
+                    success: function (result) {
+                  
+                        var myJSON = JSON.stringify(result);
+                        var response = JSON.parse(myJSON);
+                        if (response["header"].success) {
+                            var loc = response['body'].items;
+                            $.each(loc, function (i) {
+                                if (loc[i].city != null) {
+                                    if (loc[i].city.name == searchArr ) {
                                         selectedBodyar = loc[i];
                                         getCheckInDate(depbody, selectedBodyar);
                                     }
-                                });
-                            }
+                                }
+                                if (loc[i].airport != null) {
+                                    if (loc[i].airport.name == searchArr) {
+                                        selectedBodyar = loc[i];
+                                        getCheckInDate(depbody, selectedBodyar);
+                                    }
+                                }
+                            });
                         }
-                    });
-                }
-            })
-        })
-    });
-  
+                    }      
+        });
 
 }

@@ -1,7 +1,7 @@
 ﻿/// <reference path="getarrivalautocomplete.js" />
 /// <reference path="getdepartureautocomplete.js" />
 /// <reference path="flight.js" />
-/// <reference path="AutoComplete.js" />
+
 
 function getCheckInDate(selectedBodydep, selectedBodyarr) {
 

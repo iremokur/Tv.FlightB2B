@@ -1,5 +1,5 @@
 ﻿/// <reference path="getdepartureautocomplete.js" />
-/// <reference path="autocomplete.js" />
+
 
 $(document).ready(function () {
     if (localStorage.getItem("Token") == null || localStorage.getItem("Token") == '' || localStorage.getItem("Token") == 'undefined')

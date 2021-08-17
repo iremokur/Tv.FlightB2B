@@ -1,4 +1,5 @@
 ﻿
+using Flightb2b.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,11 +13,25 @@ namespace Flightb2b.Controllers
 {
     public class ProductController : Controller
     {
-        //[AuthenticationFilter]
+        
         public IActionResult Flight()
         {
             return View();
         }
-  
+
+        //[HttpPost]
+        //public ActionResult GetPriceSearch([FromBody] PriceSearchModel priceform)
+        //{
+        //    var pRequest = new PriceSearchRequest()
+        //    {
+
+              
+        //    };
+
+        //    ProductRepository productRepo1 = new ProductRepository(User.Claims.First().Value, "https://t3-services.tourvisio.com/v2/");
+        //    var rResponse = productRepo1.PriceSearch(pRequest);
+
+        //    return PartialView();
+        //}
     }
 }

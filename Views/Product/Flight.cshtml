@@ -23,20 +23,20 @@
     <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
         <div class="w3-display-container" >
             <div class="w3-bar w3-light-grey">
-                <button class="btn btn-primary" onclick="openLink(event, 'FlightOneway');"><i class="fa fa-plane margin-right"></i>Oneway</button>
-                <button class="btn btn-primary" onclick="openLink(event, 'FlightRoundtrip');"><i class="fa fa-plane margin-right"></i>Roundtrip</button>
-                <button class="btn btn-primary" onclick="openLink(event, 'FlightMultiC');"><i class="fa fa-plane margin-right"></i>Multi City</button>
+                <button class="btn btn-primary w3-hover-grey" onclick="openLink(event, 'FlightOneway');"><i class="fa fa-plane margin-right"></i>Oneway</button>
+                <button class="btn btn-primary w3-hover-grey" onclick="openLink(event, 'FlightRoundtrip');"><i class="fa fa-plane margin-right"></i>Roundtrip</button>
+                <button class="btn btn-primary w3-hover-grey" onclick="openLink(event, 'FlightMultiC');"><i class="fa fa-plane margin-right"></i>Multi City</button>
 
             </div>
             <br />
             <!-- Tab ONEWAY -->
             <div id="FlightOneway" class="w3-container w3-white w3-padding-16 myLink">
                 <div class="col-md-4">
-                    <form id="flightSearchForm" class="form" action="Flight" method="post" autocomplete="off">
+                    <form id="flightSearchForm" class="form justify-content-center" action="Flight" method="post" autocomplete="off">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
-                                <input id="Departure" list="dep" for="Departure" class="fa fa-plane form-control" placeholder="From" />
+                                <input id="Departure" name="Departure" list="dep" for="Departure" class="fa fa-plane form-control" placeholder="From" />
                                 <datalist id="dep">
                                     <label>City</label>
                                     <option id="depresultcity"></option>
@@ -53,6 +53,7 @@
                                     <option id="arrresultflight"></option>
                                 </datalist>
                             </div>
+
                         </div>
                         <div class="w3-row-padding" style="margin:8px -16px;">
                             <div class="w3-half w3-margin-bottom">
@@ -107,15 +108,6 @@
     <script src="~/js/getCheckInDate.js"></script>
     <script src="~/js/getDepartureAutocomplete.js"></script>
     <script src="~/js/AutoComplete.js"></script>
-
-    @*<script>
-            $('#logoutBtn').click(function () {
-
-                window.localStorage.removeItem('Token');
-                window.location.href = '@Url.Action("Index", "Home")';
-            });
-
-        </script>*@
 
 
     @section Scripts {
