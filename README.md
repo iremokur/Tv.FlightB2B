@@ -1,6 +1,6 @@
 # README for **Tour Visio Flight**
 
-This project is an integration of the flight section of the
+This project is the flight section of the
 Tour Visio website.
 
 ## Dates
