@@ -3,9 +3,13 @@
 
 $(document).ready(function () {
     if (localStorage.getItem("Token") == null || localStorage.getItem("Token") == '' || localStorage.getItem("Token") == 'undefined')
+    {
         localStorage.setItem("Token", getCookie("Token"));
+       
+    }
 
-   getDepAutoComplete();
+    getDeparture();
+
   
 });
 
@@ -28,11 +32,7 @@ function statusCheck(elmID)
 
 }
 function logOut() {
-    $('#logoutBtn').click(function () {
 
-        window.localStorage.removeItem('Token');
-        window.location.href = '@Url.Action("Index", "Home")';
-    });
 }
 
 

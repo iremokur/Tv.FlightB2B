@@ -1,10 +1,16 @@
 ﻿@model Flightb2b.Models.FlightModel
-
+@if (ViewBag.error != null)
+{
+    <h3 style="color:red">@ViewBag.error</h3>
+}
 @{
     Layout = "../Shared/_Layout.cshtml";
 }
 
 @using Microsoft.AspNetCore.Http;
+@using TourVisio.WebService.Adapter.Enums;
+
+
 <!DOCTYPE html>
 
 <html>
@@ -16,98 +22,141 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-</head>
-<body class="w3-light-grey">
-
-    <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
-        <div class="w3-display-container" >
-            <div class="w3-bar w3-light-grey">
-                <button class="btn btn-primary w3-hover-grey" onclick="openLink(event, 'FlightOneway');"><i class="fa fa-plane margin-right"></i>Oneway</button>
-                <button class="btn btn-primary w3-hover-grey" onclick="openLink(event, 'FlightRoundtrip');"><i class="fa fa-plane margin-right"></i>Roundtrip</button>
-                <button class="btn btn-primary w3-hover-grey" onclick="openLink(event, 'FlightMultiC');"><i class="fa fa-plane margin-right"></i>Multi City</button>
-
-            </div>
-            <br />
-            <!-- Tab ONEWAY -->
-            <div id="FlightOneway" class="w3-container w3-white w3-padding-16 myLink">
-                <div class="col-md-4">
-                    <form id="flightSearchForm" class="form justify-content-center" action="Flight" method="post" autocomplete="off">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="w3-row-padding" style="margin:0 -16px;">
-                            <div class="w3-half w3-margin-bottom">
-                                <input id="Departure" name="Departure" list="dep" for="Departure" class="fa fa-plane form-control" placeholder="From" />
-                                <datalist id="dep">
-                                    <label>City</label>
-                                    <option id="depresultcity"></option>
-                                    <label>Flight</label>
-                                    <option id="depresultflight"></option>
-                                </datalist>
-                            </div>
-                            <div class="w3-half">
-                                <input id="Arrival" name="" list="arr" for="Arrival" class="fa fa-plane form-control" placeholder="To" />
-                                <datalist id="arr">
-                                    <label>City</label>
-                                    <option id="arrresultcity"></option>
-                                    <label>Flight</label>
-                                    <option id="arrresultflight"></option>
-                                </datalist>
-                            </div>
-
-                        </div>
-                        <div class="w3-row-padding" style="margin:8px -16px;">
-                            <div class="w3-half w3-margin-bottom">
-                                <label>Departure Date</label>
-                                <input type="date" id="checkin" name="checkin">
-                            </div>
-                            <div class="w3-half">
-                                <label for="checkout">Return Date</label>
-                                <input type="date" id="checkout" name="checkout" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label><i></i> Flight Class</label>
-                            <select class="form-control">
-                                <option selected>All</option>
-                                <option>Promo</option>
-                                <option>Economy</option>
-                                <option>Business</option>
-                            </select>
-
-                            <label><i></i>Currency</label>
-                            <select class="form-control">
-                                <option selected>EUR</option>
-                                <option>TRY</option>
-                                <option>USD</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fa fa-male"></i> Adults</label>
-                            <input class="w3-input w3-border" type="number" value="1" name="Adults" min="0" max="9">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fa fa-child"></i> Child</label>
-                            <input class="w3-input w3-border" type="number" value="0" name="Kids" min="0" max="9">
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" id="searchBtn" value="Search Flight" class="btn btn-primary" />
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-
-        </div>
-    </header>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jquery-ui.js"></script>
     <script src="~/js/flight.js"></script>
     <script src="~/js/getArrivalAutoComplete.js"></script>
     <script src="~/js/getCheckInDate.js"></script>
     <script src="~/js/getDepartureAutocomplete.js"></script>
-    <script src="~/js/AutoComplete.js"></script>
+    <link href="~/css/flight.css" rel="stylesheet" />
+
+
+
+</head>
+<body class="w3-light-grey">
+    <input type="submit" id="logoutBtn" value="LogOut" class="btn btn-outline-primary" />
+    <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+        <div class="w3-display-container">
+            <form class="form justify-content-center align-items-center">
+                <div class="w3-bar w3-light-grey">
+                    <button  type="button" class="btn btn-outline-primary" id="OW" value="1" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "1" })'"><i class="fa fa-plane margin-right"></i>Oneway</button>
+                    <button type="button" class="btn btn-outline-primary" id="RT" value="2" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "2" })'"><i class="fa fa-plane margin-right"></i>Roundtrip</button>
+                    <button type="button" class="btn btn-outline-primary" id="MC" value="3" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "3" })'"><i class="fa fa-plane margin-right"></i>Multi City</button>
+                </div>
+                <br />
+            </form>
+            <div class="container">
+                <div class="card-body">
+                    <div class="track">
+                        <div class="step active"> <span class="icon"> <i class="fa fa-plane "></i> </span> <span class="text">Search Flight</span> </div>
+                        <div class="step"> <span class="icon"> <i class="fa fa-plane "></i> </span> <span class="text">Choose Flight </span> </div>
+                        <div class="step"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Enter Information</span> </div>
+                        <div class="step"> <span class="icon"> <i class="fa fa-check-circle"></i> </span> <span class="text">Complete Booking</span> </div>
+                    </div>
+                    <hr>
+                </div>
+
+                <!-- Tab ONEWAY -->
+                <div id="FlightOneway" class="w3-container w3-white w3-padding-16 myLink">
+                    <div class="row justify-content-center align-items-center">
+                        <form id="flightSearchForm" class="form justify-content-center" action="@Url.Action("PriceSearch", "Product")" method="post" autocomplete="off">
+                            @Html.HiddenFor(Model => Model.ServiceType, new { id = "1" })
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="w3-row-padding" style="margin:0 -16px;">
+                                <div class="w3-half w3-margin-bottom">
+                                    @Html.HiddenFor(Model => Model.DepartureLocation.Type, enmLocationType.Airport)
+                                    <input id="Departure" list="dep" name="@Html.NameFor(Model => Model.DepartureLocation.Name)" for="Departure" class="fa fa-plane form-control" placeholder="From" />
+                                    <datalist id="dep">
+                                        <option id="depresultcity" title="City">  </option>
+                                        <option id="depresultflight" title="Flight"></option>
+                                    </datalist>
+                                </div>
+                                <div class="w3-half">
+                                    @Html.HiddenFor(Model => Model.ArrivalLocation.Type, enmLocationType.Airport)
+                                    <input id="Arrival" list="arr" name="@Html.NameFor(Model => Model.ArrivalLocation.Name)" for="Arrival" class="fa fa-plane form-control" placeholder="To" />
+                                    <datalist id="arr">
+                                        <option id="arrresultcity" title="City"> </option>
+                                        <option id="arrresultflight" title="Flight"> </option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="w3-row-padding" style="margin:8px -16px;">
+                                <div class="w3-half w3-margin-bottom">
+                                    <label>Departure Date</label>
+                                    <input type="date" id="checkin" name="checkin">
+                                </div>
+                                <div class="w3-half">
+                                    <label for="checkout">Return Date</label><br />
+                                    <input type="date" id="checkout" name="checkout" disabled ="@(Model.ServiceType != "2")">
+                                </div>
+                                </div>
+                            <div class="form-group">
+                                <label><i></i> Flight Class</label>
+                                <select class="form-control" title="Flight Class">
+                                    <option selected>All</option>
+                                    <option>Promo</option>
+                                    <option>Economy</option>
+                                    <option>Business</option>
+                                </select>
+
+                                <label><i></i>Currency</label>
+                                <select class="form-control" title="Currency">
+                                    <option selected>EUR</option>
+                                    <option>TRY</option>
+                                    <option>USD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa fa-male"></i> Adults</label>
+                                @Html.HiddenFor(Model => Model.Passengers[0].Type, enmPassangerType.Adult)
+                                <select id="Adult" name="@Html.NameFor(m => m.Passengers[0].Count)" title="Adult">
+                                    @for (int i = 1; i <= 9; i++)
+                                    {
+                                        <option value=@i>@i</option>
+
+                                    }
+                                </select>
+
+                                <label><i class="fa fa-child"></i> Child</label>
+                                @Html.HiddenFor(Model => Model.Passengers[1].Type, enmPassangerType.Child)
+                                <select id="Child" name="@Html.NameFor(m => m.Passengers[1].Count)" title="Child">
+                                    @for (int i = 0; i <= 9; i++)
+                                    {
+                                        <option value=@i>@i</option>
+
+                                    }
+                                </select>
+
+                                <label><i class="fa fa-child"></i> Infant</label>
+                                @Html.HiddenFor(Model => Model.Passengers[2].Type, enmPassangerType.Infant)
+                                <select id="Infant" name="@Html.NameFor(m => m.Passengers[2].Count)" title="Infant">
+                                    @for (int i = 0; i <= 9; i++)
+                                    {
+                                        <option value=@i>@i</option>
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" id="searchBtn" value="Search Flight" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+    <script>
+
+        $('#logoutBtn').click(function () {
+           window.localStorage.removeItem('Token');
+           window.location.href = '@Url.Action("Index", "Home")';
+        });
+     
+    </script>
 
 
     @section Scripts {
@@ -115,4 +164,4 @@
     }
 
 </body>
-    </html>
+</html>

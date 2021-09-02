@@ -30,7 +30,9 @@ namespace Flightb2b
         {
             services.AddControllersWithViews();
             services.AddSession();
-        
+            services.AddRazorPages()
+           .AddRazorRuntimeCompilation();
+
 
             //  services.AddDbContext<LoginModel>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultDbConnection")));
             //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<LoginModel>().AddDefaultTokenProviders();

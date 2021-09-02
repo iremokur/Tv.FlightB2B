@@ -1,15 +1,20 @@
-﻿/// <reference path="flight.js" />
+﻿/// <reference path="getarrivalautocomplete.js" />
+/// <reference path="flight.js" />
 
-function getDepAutoComplete() {
- 
+function getDeparture() {
+
+    done = false;
     isSelected = false;
     var searchField;
+
     var experission;
     $('#Departure').keyup(function () {
         $('#depresultcity').html('');
         $('#depresultflight').html('');
         searchField = $('#Departure').val();
-        experission = new RegExp(searchField, "i");
+        experission =new RegExp(searchField, "i");
+       
+      
         var request = { "currency": "EUR", "culture": "tr-TR", "query": experission.source, "productType": 3, "serviceType": "2" };
      
         if (statusCheck("Departure")) {
@@ -31,16 +36,17 @@ function getDepAutoComplete() {
                             if (loc[i].city != null) {
                                 var name = loc[i].city.name;
                                 if (name.search(experission.source) != -1) {
-                                    $('#depresultcity').append("<datalist><option>" + name + "</option></datalist>");
+                                    $('#depresultcity').append("<datalist><option>"+ name  + "</option></datalist>");
                                 }
                             }
                             if (loc[i].airport != null) {
                                 var name = loc[i].airport.name;
                                 if (name.search(experission.source) != -1) {
-                                    $('#depresultflight').append("<datalist><option>" + name + "</option></datalist>");
+                                    $('#depresultflight').append("<datalist><option> "+name  + "</option></datalist>");
 
                                 }
                             }
+                            done = true;
                         });
                     }
                 }
@@ -52,7 +58,7 @@ function getDepAutoComplete() {
         $("#dep").find("option").each(function () {
             var search = $(this).val();
 
-            if (searchdep == search) {
+            if (searchdep == search && done!=false) {
 
                 isSelected = true;
 

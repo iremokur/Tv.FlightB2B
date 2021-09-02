@@ -4,7 +4,7 @@
 
 function getArrivalAutoComplete(depbody) {
 
-
+    done = false;
     isSelected = false;
     $('#Arrival').keyup(function () {
         $('#arrresultcity').html('');
@@ -46,19 +46,20 @@ function getArrivalAutoComplete(depbody) {
                                     $('#arrresultflight').append("<datalist><option>" + name + "</option></datalist>");
                                 }
                             }
-
+                            done = true;
                         });
                     }
                 }
             });
         }
     });
+
     $('#Arrival').on('input', function () {
         var searchArr = $(this).val();
         $("#arr").find("option").each(function () {
             var search = $(this).val();
 
-            if (search == searchArr) {
+            if (search == searchArr &&done!=false) {
 
                 isSelected = true;
                 getSelectedArrival(searchArr, depbody);
@@ -92,7 +93,7 @@ function getSelectedArrival(searchArr,depbody) {
                             var loc = response['body'].items;
                             $.each(loc, function (i) {
                                 if (loc[i].city != null) {
-                                    if (loc[i].city.name == searchArr ) {
+                                    if (loc[i].city.name == searchArr) {
                                         selectedBodyar = loc[i];
                                         getCheckInDate(depbody, selectedBodyar);
                                     }

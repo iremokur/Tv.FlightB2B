@@ -29,14 +29,13 @@ namespace Flightb2b.Controllers
         public IActionResult SignIn([FromForm] LoginRequest pRequest)
         {
             var T3_servicebase_url = "http://t3-services.tourvisio.com/v2/";
-            var model = new LoginModel();
-     
-            pRequest.WebRequestDetail = new mdlWebRequestDetail();
-            pRequest.WebRequestDetail.ClientAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            pRequest.WebRequestDetail.UserAgent = Request.Headers["User-Agent"];
-            pRequest.WebRequestDetail.Domain = Request.Host.Value;
-            pRequest.WebRequestDetail.Referrer = Request.Headers["Referer"];
-            pRequest.Version = GetType().Assembly.GetName().Version.ToString();
+           
+            //pRequest.WebRequestDetail = new mdlWebRequestDetail();
+            //pRequest.WebRequestDetail.ClientAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            //pRequest.WebRequestDetail.UserAgent = Request.Headers["User-Agent"];
+            //pRequest.WebRequestDetail.Domain = Request.Host.Value;
+            //pRequest.WebRequestDetail.Referrer = Request.Headers["Referer"];
+            //pRequest.Version = GetType().Assembly.GetName().Version.ToString();
             AuthenticationRepository authentication = new AuthenticationRepository("", T3_servicebase_url);
 
             var response = authentication.Login(pRequest);

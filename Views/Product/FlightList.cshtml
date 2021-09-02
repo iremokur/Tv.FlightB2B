@@ -1,0 +1,168 @@
+﻿@model FlightModel
+@if (ViewBag.error != null)
+{
+    <h3 style="color:red">@ViewBag.error</h3>
+}
+@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FlightList</title>
+    <script src="~/js/flight.js"></script>
+    <title>Display Selected HTML Table TR Values In Input Text</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/css/flight.css" rel="stylesheet" />
+    <style>
+        table {
+            border-collapse: collapse;
+            font-family: helvetica
+        }
+
+        td, th {
+            border: 1px solid;
+            padding: 10px;
+            background: white;
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        .table-container {
+            position: relative;
+            max-height: 320px;
+            width: 1100px;
+            overflow: scroll;
+        }
+        .card {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0.10rem
+        }
+        p {
+            margin-top: 0;
+            margin-bottom: 1rem
+        }
+    </style>
+
+</head>
+<body>
+
+    <div>
+        <input type="submit" id="logoutBtn" value="LogOut" class="btn btn-outline-primary" />
+    </div>
+
+
+
+
+    <div class="container">
+        <div class="card-body">
+
+            <div class="track">
+                <div class="step active"> <span class="icon"> <i class="fa fa-plane "></i> </span> <span class="text">Search Flight</span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-plane "></i> </span> <span class="text">Choose Flight </span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Enter Information</span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check-circle"></i> </span> <span class="text">Complete Booking</span> </div>
+            </div>
+            <hr>
+
+        </div>
+
+        <h3>FlightList</h3>
+        <form action="@Url.Action("BeginTransaction", "Booking")" method="post">
+
+            <div class="table-container">
+
+                <div class="table-horizontal-container">
+
+                    <table class="unfixed-table " border="1" style="height: 150px; border:2px;">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="5%"></th>
+                                <th scope="col" width="10%">Flight No</th>
+                                <th scope="col" width="10%">Airline</th>
+                                <th scope="col" width="10%">Provider</th>
+                                <th scope="col" width="10%">Flight Date</th>
+                                <th scope="col" width="10%">From</th>
+                                <th scope="col" width="10%">To</th>
+                                <th scope="col" width="20%">Price Currency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var flight in Model.Flight)
+                            {
+                                @foreach (var item in flight.Items)
+                                {
+                                    <tr>
+                                        <td width="5%"><input name="OfferID" value="@flight.Offer.OfferId" type="radio" onclick="toggleBookFlight()" /></td>
+                                        <td width="10%">@item.FlightNo</td>
+                                        <td width="10%">@item.Airline.Name</td>
+                                        <td width="10%">@flight.Provider</td>
+                                        <td width="10%">@item.FlightDate</td>
+                                        <td width="10%">@item.Departure.Airport.Name</td>
+                                        <td width="10%">@item.Arrival.Airport.Name</td>
+                                        <td width="20%">@flight.Offer.Price.Amount  @flight.Offer.Price.Currency </td>
+                                    </tr>
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div id="book">
+                <input type="submit" id="bookflight" value="Book Flight" class="btn btn-primary" />
+            </div>
+
+        </form>
+
+    </div>
+    <script>
+
+        $('#logoutBtn').click(function () {
+           window.localStorage.removeItem('Token');
+           window.location.href = '@Url.Action("Index", "Home")';
+        });
+        $(document).ready(function () {
+            $("#book").hide();
+
+        });
+        function toggleBookFlight() {
+            var x = document.getElementById("book");
+
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+
+    </script>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</body>
+</html>

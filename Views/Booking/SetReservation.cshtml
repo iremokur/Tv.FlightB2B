@@ -1,0 +1,263 @@
+﻿@model PassengerModel
+@using TourVisio.WebService.Adapter.Enums;
+@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+@if (ViewBag.error != null)
+{
+    <h3 style="color:red">@ViewBag.error</h3>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SetReservation</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="~/css/flight.css" rel="stylesheet" />
+    <style>
+            .myaccordion {
+                box-shadow: 0 0 1px rgba(0,0,0,0.1);
+            }
+            .myaccordion .card-header {
+                border-bottom-color: dodgerblue;
+            }
+            .myaccordion .btn {
+                width: 100%;
+                font-weight: bold;
+                padding: 0;
+                font-family: 'Open Sans', serif
+            }
+            .myaccordion .btn-link:hover,
+            .myaccordion .btn-link:focus {
+                text-decoration: none;
+            }
+    </style>
+</head>
+
+<body class="w3-light-grey">
+    <input type="submit" id="logoutBtn" value="LogOut" class="btn btn-outline-primary" />
+    <div class="container">
+        <div class="card-body">
+            <div class="track">
+                <div class="step active"> <span class="icon"> <i class="fa fa-plane "></i> </span> <span class="text">Search Flight</span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-plane "></i> </span> <span class="text">Choose Flight </span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Enter Information</span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check-circle"></i> </span> <span class="text">Complete Booking</span> </div>
+            </div>
+            <hr>
+        </div>
+
+        <header class="w3-display-container w3-content w3-hide-small" style="max-width:1500px">
+            <div class="w3-display-container">
+                <div id="FlightOneway" class="w3-container w3-white w3-padding-16 myLink">
+                    <div class="form justify-content-center">
+                        <form action="@Url.Action("SetReservation", "Booking")" method="post">
+                            <div id="accordion" class="myaccordion">
+                                <div class="card">
+
+                                    @Html.HiddenFor(Model => Model.TransactionResponse.TransactionId, Model.TransactionResponse.TransactionId)
+                                    @for (int tempindex = 0; tempindex < Model.Travellers.Count; tempindex++)
+                                    {
+                                        @Html.HiddenFor(Model => Model.Travellers[tempindex].TravellerId, Model.Travellers[tempindex].TravellerId)
+
+                                        for (int i = 0; i < Model.Travellers[tempindex].RequiredFields.Count; i++)
+                                        {
+
+                                            @Html.HiddenFor(Model => Model.Travellers[tempindex].RequiredFields[i], Model.Travellers[tempindex].RequiredFields[i])
+
+                                        }
+                                        <div class="card-header" id="headingOne">
+                                            <h2 class="mb-0">
+                                                <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+
+                                                    <span class="fa-stack fa-sm">
+                                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                                        <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
+                                                    </span>
+                                                    <h1>Passenger Information @(tempindex+1) (@Model.Travellers[tempindex].PassengerType)</h1>
+                                                </button>
+                                            </h2>
+                                        </div>
+                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                            <div class="card-body">
+
+
+                                                @if (Model.Travellers[tempindex].PassengerType == enmPassangerType.Adult)
+                                                {
+                                                    @Html.HiddenFor(Model => Model.Travellers[tempindex].Type, enmTravellerType.Adult)
+                                                }
+                                                @if (Model.Travellers[tempindex].PassengerType == enmPassangerType.Child)
+                                                {
+                                                    @Html.HiddenFor(Model => Model.Travellers[tempindex].Type, enmTravellerType.Child)
+                                                }
+                                                @if (Model.Travellers[tempindex].PassengerType == enmPassangerType.Infant)
+                                                {
+                                                    @Html.HiddenFor(Model => Model.Travellers[tempindex].Type, enmTravellerType.Infant)
+                                                }
+
+                                                <table class="form justify-content-center align-items-center">
+                                                    <tr>
+                                                        <td>
+                                                            Title<br />
+                                                            <select class="form-control" name="@Html.NameFor(m => m.Travellers[tempindex].Title)" title="Title" style="width:100px">
+                                                                <option value="1">Mr</option>
+                                                                <option selected value="2">Ms</option>
+                                                                <option value="3">Mrs</option>
+                                                                <option value="4">Miss</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <label class="control-label">Name (*)</label> <br />
+                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].Name)" required class="form-control" />
+
+                                                        </td>
+
+                                                        <td>
+                                                            <label class="control-label">Surname (*)</label><br />
+                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].Surname)" required class="form-control" />
+
+                                                        </td>
+                                                        <td>
+                                                            <label class="control-label"></label>BirthDate (*)<br />
+                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].BirthDate)" type="date" class="form-control" />
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input id="yes" type="radio" name="IsTurkishCitizen" checked value="TurkishCitizen">Yes
+                                                            <br />
+                                                            <input id="no" type="radio" name="IsTurkishCitizen" value="notTurkishCitizen">No
+                                                            <br />
+
+                                                            <table id="TurkishCitizen" class="charge-table">
+                                                                <tr>
+                                                                    <td>
+                                                                        <label class="control-label">IdentityNumber</label><br />
+                                                                        <input name="@Html.NameFor(m => m.Travellers[tempindex].IdentityNumber)" class="form-control" />
+
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <label class="control-label">HESCode</label><br />
+                                                                        <input name="@Html.NameFor(m => m.Travellers[tempindex].HESCode)" class="form-control" />
+
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table id="notTurkishCitizen" class="charge-table">
+                                                                <tr>
+                                                                    <td>
+                                                                        <label class="control-label"> Nationality</label><br />
+                                                                        <select name="@Html.NameFor(m => m.Travellers[tempindex].Nationality.TwoLetterCode)">
+                                                                            @foreach (var code in Model.Nationalities)
+                                                                            {
+                                                                                <option value="@(code.TwoLetterCode)">@code.Name</option>
+                                                                            }
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <p><b>Contact Information</b> <i> @(tempindex +1) (@Model.Travellers[tempindex].PassengerType) </i></p>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="control-label">Email (*)</label><br />
+                                                            <input type="text" style="width:200px" required name="@Html.NameFor(m => m.Travellers[tempindex].Address.Email)">
+                                                        </td>
+                                                        <td>
+                                                            <label class="control-label">Country Code (*)</label><br />
+                                                            <select name="@Html.NameFor(m => m.Travellers[tempindex].Address.ContactPhone.CountryCode)" required style="width:200px">
+                                                                @foreach (var code in Model.Nationalities)
+                                                                {
+                                                                    <option value="@(code.ISDCode)">@code.Name +(@code.ISDCode)</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <label class="control-label">Area Code (*)</label><br />
+                                                            <input type="text" required name="@Html.NameFor(m => m.Travellers[tempindex].Address.ContactPhone.AreaCode)">
+                                                        </td>
+                                                        <td>
+                                                            <label class="control-label"> Phone Number (*)</label><br />
+                                                            <input type="text" required name="@Html.NameFor(m => m.Travellers[tempindex].Address.ContactPhone.PhoneNumber)">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <p> <b>Passport Information</b> <i>@(tempindex+1) (@Model.Travellers[tempindex].PassengerType)</i></p>
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <label class="control-label">Serial (*)</label><br />
+                                                            <input required name="@Html.NameFor(m => m.Travellers[tempindex].PassportInfo.Serial)" class="form-control" />
+
+                                                        </td>
+
+                                                        <td>
+                                                            <label class="control-label">Number (*)</label><br />
+                                                            <input required name="@Html.NameFor(m => m.Travellers[tempindex].PassportInfo.Number)" class="form-control" />
+
+                                                        </td>
+
+                                                        <td>
+                                                            <label class="control-label"></label>ExpireDate<br />
+                                                            <input name="@(Model.Travellers[tempindex].PassportInfo.ExpireDate.HasValue ? Model.Travellers[tempindex].PassportInfo.ExpireDate.Value.ToString("dd.MM.yyyy") : "" )" class="form-control" type="date" />
+
+                                                        </td>
+
+                                                        <td>
+                                                            <label class="control-label">IssueDate</label><br />
+                                                            <input name="@(Model.Travellers[tempindex].PassportInfo.IssueDate.HasValue ? Model.Travellers[tempindex].PassportInfo.IssueDate.Value.ToString("dd.MM.yyyy") : "" )" class="form-control" type="date" />
+                                                            <span class="text-danger"></span>
+                                                        </td>
+
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="submit" id="Book" value="Book Flight!" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div>
+        <a href='@Url.Action("PriceSearch", "Product")'>Back to List</a>
+    </div>
+    <script>
+        $('#logoutBtn').click(function () {
+           window.localStorage.removeItem('Token');
+           window.location.href = '@Url.Action("Index", "Home")';
+        });
+        var tables = $('.charge-table');
+        $('input[name="IsTurkishCitizen"]').on('change', function () {
+            tables.hide();
+            $('#' + $(this).val()).show();
+        });
+    </script>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</body>
+</html>
