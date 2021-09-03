@@ -1,0 +1,145 @@
+﻿@model PassengerModel
+
+@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetReservationDetail</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/css/flight.css" rel="stylesheet" />
+</head>
+<body>
+
+    <hr />
+
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-4" >
+                <div class="card" style="width:500px">
+                    <div class="card-body">
+                        <div class="track">
+
+                            <div class="step active"> <span class="icon"> <i class="fa fa-check-circle"></i> </span> <span class="text">Reservation Details</span> </div>
+                        </div>
+                        <form asp-action="GetReservationDetail">
+                            <h5 style="color: orangered">RESERVATION CREATE DATE : @Model.ReservationInfo.CreateDate</h5>
+                            <div class="form-group">
+                                <p style="color:green">Booking Number : @Model.BookingNumber</p>
+                            </div>
+                            <div class="form-group">
+                                <p>Begin Date : @Model.ReservationInfo.BeginDate</p>
+                                <p>
+                                    End Date : @Model.ReservationInfo.EndDate
+                                </p>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <p>Agency : @Model.ReservationInfo.Agency.Name </p>
+                            </div>
+                            <div class="form-group">
+                                <p>Agency User : @Model.ReservationInfo.AgencyUser.Name </p>
+                            </div>
+                            <h5 style="color:orangered">Traveller Information</h5>
+                            <table border="1" style="width:auto">
+                                <tr>
+
+                                    <td><b>Name</b></td>
+                                    <td></td>
+                                    <td><b>Surname</b></td>
+                                    <td></td>
+                                    <td><b>Passport Serial</b></td>
+                                    <td><b>Passport Number</b></td>
+                                </tr>
+                                @if (Model != null && Model.Travellers != null) //NUll check for Model
+                                {
+                                    @foreach (var traveller in Model.Travellers)
+                                    {
+                                        <tr>
+                                            <td>@traveller.Name</td>
+                                            <td></td>
+                                            <td>@traveller.Surname</td>
+                                            <td></td>
+                                            <td>@traveller.PassportInfo.Serial</td>
+                                            <td>@traveller.PassportInfo.Number</td>
+
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                            <br />
+                            <br />
+                            <h5 style="color: orangered">Flight Ticket Details</h5>
+                            <table border="1" style="width:auto">
+                                <tr>
+                                    <td><b>Flight Code</b></td>
+                                    <td></td>
+                                    <td><b>Dep - Arr</b></td>
+                                    <td></td>
+                                    <td><b>Departure Date</b></td>
+                                    <td></td>
+                                    <td><b>Arrival Date</b></td>
+                                    <td></td>
+                                    <td><b>Class</b></td>
+                                    <td></td>
+                                    <td><b>PNR</b></td>
+                                    <td></td>
+                                    <td><b>Status</b></td>
+                                    <td></td>
+                                    <td><b>Price</b></td>
+                                </tr>
+
+                                @if (Model != null && Model.Services != null) //NUll check for Model
+                                {
+                                    @foreach (var service in Model.Services)
+                                    {
+                                        @if (service.ServiceDetails != null && service.ServiceDetails.FlightInfo != null) //NUll check for Model
+                                        {
+
+                                            <tr>
+
+                                                <td>@service.ServiceDetails.FlightInfo.FlightNo</td>
+                                                <td></td>
+                                                <td>@service.ServiceDetails.FlightInfo.Departure.Airport.Code - @service.ServiceDetails.FlightInfo.Arrival.Airport.Code </td>
+                                                <td></td>
+                                                <td>@service.ServiceDetails.FlightInfo.Departure.Date</td>
+                                                <td></td>
+                                                <td>@service.ServiceDetails.FlightInfo.Arrival.Date</td>
+                                                <td></td>
+                                                <td>@service.ServiceDetails.FlightInfo.FlightClass.Name</td>
+                                                @if (service.PNRNo != null)
+                                                {
+                                                    <td></td>
+                                                    <td>@service.PNRNo</td>
+                                                }
+                                                @if (service.ServiceStatus != null)
+                                                {
+                                                    <td></td>
+                                                    <td>@service.ServiceStatus</td>
+                                                }
+                                                @if (Model.TotalPrice.Amount != 0)
+                                                {
+                                                    <td></td>
+                                                    <td>@Model.TotalPrice.Amount @Model.TotalPrice.Currency</td>
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</body>
+</html>

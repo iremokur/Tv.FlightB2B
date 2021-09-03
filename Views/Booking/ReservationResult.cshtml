@@ -1,7 +1,7 @@
 ﻿@model PassengerModel
-@if (ViewBag.error != null)
+@if (Model.Error != null)
 {
-    <h3 style="color:red">@ViewBag.error</h3>
+    <h3 style="color:red">@Model.Error</h3>
 }
 @{
     Layout = "../Shared/_Layout.cshtml";
@@ -61,19 +61,21 @@
 
                 <form asp-action="ReservationResult">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <h3 style="color:green">Booking is Successful  (Booking Number: @Model.BookingNumber)</h3>
+
+                    <h3 style="color:green">Booking is Successful!</h3>
+                    <h3><a href="~/Booking/GetReservationDetail/@Model.BookingNumber">Booking Number : @Model.BookingNumber </a> </h3>
 
                     <br>
-                    <h5 style="color:deepskyblue">Flight Ticket Details</h5>
+                    <h5 style="color: orangered">Flight Ticket Details</h5>
                     <table border="1" style="width:auto">
                         <tr>
                             <td><b>Flight Code</b></td>
                             <td></td>
-                            <td><b>Dep-Arr</b></td>
+                            <td><b>Dep - Arr</b></td>
                             <td></td>
-                            <td><b>Dep. Date</b></td>
+                            <td><b>Departure Date</b></td>
                             <td></td>
-                            <td><b>Arr. Date</b></td>
+                            <td><b>Arrival Date</b></td>
                             <td></td>
                             <td><b>Class</b></td>
                             <td></td>
@@ -112,10 +114,10 @@
                                             <td></td>
                                             <td>@service.ServiceStatus</td>
                                         }
-                                        @if (service.Price.Amount != 0)
+                                        @if (Model.TotalPrice.Amount != 0)
                                         {
                                             <td></td>
-                                            <td>@service.Price.Amount</td>
+                                            <td>@Model.TotalPrice.Amount @Model.TotalPrice.Currency</td>
                                         }
                                     </tr>
                                 }
@@ -123,8 +125,7 @@
                         }
                     </table>
                     <br>
-                    <h5 style="color:deepskyblue">Traveller Information</h5>
-
+                    <h5 style="color:orangered">Traveller Information</h5>
                     <table border="1" style="width:auto">
                         <tr>
 

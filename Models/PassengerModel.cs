@@ -22,6 +22,7 @@ namespace Flightb2b.Models
         public List<mdlNationality> Nationalities { get; set; }
         public mdlPrice TotalPrice { get; set; }
         public string BookingNumber { get; set; }
+        public string Error { get; set; }
         public PassengerModel()
         {
             this.TransactionResponse = new TransactionResponse();

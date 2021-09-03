@@ -1,12 +1,19 @@
 ﻿@model FlightModel
-@if (ViewBag.error != null)
+@using TourVisio.WebService.Adapter.Enums;
+@if (Model.Error != null)
 {
-    <h3 style="color:red">@ViewBag.error</h3>
+    <h3 style="color:red">@Model.Error</h3>
 }
 @{
     Layout = "../Shared/_Layout.cshtml";
 }
+@{ 
 
+    var tmpOutbound = "";
+    var tempPriceutbound = 0;
+    var tempPriceReturn = 0;
+    var tmpReturn = "";
+}
 
 <!DOCTYPE html>
 
@@ -70,9 +77,6 @@
         <input type="submit" id="logoutBtn" value="LogOut" class="btn btn-outline-primary" />
     </div>
 
-
-
-
     <div class="container">
         <div class="card-body">
 
@@ -85,17 +89,15 @@
             <hr>
 
         </div>
-
-        <h3>FlightList</h3>
         <form action="@Url.Action("BeginTransaction", "Booking")" method="post">
-
+            <h1>OUTBOUND FLIGHTS</h1>
+            <input type="submit" id="Book" value="Choose Flight!" class="btn btn-primary" style="margin-left:1000px" />
             <div class="table-container">
-
                 <div class="table-horizontal-container">
-
                     <table class="unfixed-table " border="1" style="height: 150px; border:2px;">
                         <thead>
                             <tr>
+
                                 <th scope="col" width="5%"></th>
                                 <th scope="col" width="10%">Flight No</th>
                                 <th scope="col" width="10%">Airline</th>
@@ -104,36 +106,105 @@
                                 <th scope="col" width="10%">From</th>
                                 <th scope="col" width="10%">To</th>
                                 <th scope="col" width="20%">Price Currency</th>
+                                <th scope="col" width="20%">Flight Class</th>
                             </tr>
                         </thead>
                         <tbody>
 
                             @foreach (var flight in Model.Flight)
                             {
+
                                 @foreach (var item in flight.Items)
                                 {
-                                    <tr>
-                                        <td width="5%"><input name="OfferID" value="@flight.Offer.OfferId" type="radio" onclick="toggleBookFlight()" /></td>
-                                        <td width="10%">@item.FlightNo</td>
-                                        <td width="10%">@item.Airline.Name</td>
-                                        <td width="10%">@flight.Provider</td>
-                                        <td width="10%">@item.FlightDate</td>
-                                        <td width="10%">@item.Departure.Airport.Name</td>
-                                        <td width="10%">@item.Arrival.Airport.Name</td>
-                                        <td width="20%">@flight.Offer.Price.Amount  @flight.Offer.Price.Currency </td>
-                                    </tr>
+
+                                    if (item.Route == enmFlightRouteType.Outbound)
+                                    {
+                                        if (tmpOutbound != item.FlightNo && tempPriceutbound != (int)flight.Offer.Price.Amount)
+                                        {
+
+                                            <tr>
+
+                                                <td width="5%"><input name="OfferIDIn" value="@flight.Offer.OfferId" type="radio" /></td>
+                                                <td width="10%">@item.FlightNo</td>
+                                                <td width="10%">@item.Airline.Name</td>
+                                                <td width="10%">@flight.Provider</td>
+                                                <td width="10%">@item.FlightDate</td>
+                                                <td width="10%">@item.Departure.Airport.Name</td>
+                                                <td width="10%">@item.Arrival.Airport.Name</td>
+                                                <td width="20%">@flight.Offer.Price.Amount  @flight.Offer.Price.Currency </td>
+                                                <td width="10%">@item.FlightClass.Name</td>
+                                            </tr>
+                                        }
+                                        tmpOutbound = item.FlightNo;
+                                        tempPriceutbound = (int)flight.Offer.Price.Amount;
+                                    }
 
                                 }
+
                             }
                         </tbody>
                     </table>
-
                 </div>
+            </div>
+            @if (Model.ServiceType != "1")
+            {
+                <h1>RETURN FLIGHTS</h1>
+                <div class="table-container">
 
-            </div>
-            <div id="book">
-                <input type="submit" id="bookflight" value="Book Flight" class="btn btn-primary" />
-            </div>
+                    <div class="table-horizontal-container">
+
+                        <table class="unfixed-table " border="1" style="height: 150px; border:2px;" id="returnTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" width="5%"></th>
+                                    <th scope="col" width="10%">Flight No</th>
+                                    <th scope="col" width="10%">Airline</th>
+                                    <th scope="col" width="10%">Provider</th>
+                                    <th scope="col" width="10%">Flight Date</th>
+                                    <th scope="col" width="10%">From</th>
+                                    <th scope="col" width="10%">To</th>
+                                    <th scope="col" width="20%">Price Currency</th>
+                                    <th scope="col" width="20%">Flight Class</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+
+                                @foreach (var flight in Model.Flight)
+                                {
+                                    @foreach (var item in flight.Items)
+                                    {
+
+                                        if (item.Route == enmFlightRouteType.Return)
+                                        {
+                                            if (tmpReturn != item.FlightNo && tempPriceReturn != (int)flight.Offer.Price.Amount)
+                                            {
+                                                <tr>
+                                                    <td width="5%"><input name="OfferIDOut" value="@flight.Offer.OfferId" type="radio" /></td>
+                                                    <td width="10%">@item.FlightNo</td>
+                                                    <td width="10%">@item.Airline.Name</td>
+                                                    <td width="10%">@flight.Provider</td>
+                                                    <td width="10%">@item.FlightDate</td>
+                                                    <td width="10%">@item.Departure.Airport.Name</td>
+                                                    <td width="10%">@item.Arrival.Airport.Name</td>
+                                                    <td width="20%">@flight.Offer.Price.Amount  @flight.Offer.Price.Currency </td>
+                                                    <td width="10%">@item.FlightClass.Name</td>
+                                                </tr>
+                                            }
+                                            tmpReturn = item.FlightNo;
+                                            tempPriceReturn = (int)flight.Offer.Price.Amount;
+                                        }
+                                    }
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
 
         </form>
 
@@ -144,19 +215,7 @@
            window.localStorage.removeItem('Token');
            window.location.href = '@Url.Action("Index", "Home")';
         });
-        $(document).ready(function () {
-            $("#book").hide();
-
-        });
-        function toggleBookFlight() {
-            var x = document.getElementById("book");
-
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
-        }
+      
 
 
     </script>

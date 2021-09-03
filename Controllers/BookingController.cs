@@ -22,35 +22,41 @@ namespace Flightb2b.Controllers
         [HttpPost]
         public ActionResult BeginTransaction(FlightModel flightSearchForm)
         {
+
             var T3_servicebase_url = "http://t3-services.tourvisio.com/v2/";
             PassengerModel passForm = new PassengerModel();
             var prequest = new BeginTransactionRequest()
             {
-                OfferIds = new string[] { flightSearchForm.OfferID },
+                OfferIds = new string[] { flightSearchForm.OfferIDIn },
                 Culture = flightSearchForm.Culture,
                 Currency = flightSearchForm.Currency
             };
-            BookingRepository book = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcxNjYiLCJuYmYiOjE2MzA1NjMwNjksImV4cCI6MTYzMDU5OTA2OSwiaWF0IjoxNjMwNTYzMDY5fQ.R6kpvHymtlUGGmtVstHRyqxioAL0rLuKTV2gik9G0KE", T3_servicebase_url);
+          
+          
+            BookingRepository book = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcyNDAiLCJuYmYiOjE2MzA2NDk0MTAsImV4cCI6MTYzMDY4NTQxMCwiaWF0IjoxNjMwNjQ5NDEwfQ.uYVMP4EBWiFbOa6mETjLUo51DfM59WUevxDPPHHZyQM", T3_servicebase_url);
             var response = book.BeginTransaction(prequest);
             if (!response.Header.Success)
             {
-                ViewBag.error = "An error occured! Try Again!";
+                flightSearchForm.Error = response.Header.Messages.First().Message;
                 return RedirectToAction("Flight", "Product");
             }
             else
             {
                 passForm.TransactionResponse= response.Body;
                 passForm.Travellers = response.Body.ReservationData.Travellers;
-                LookupRepository lookup1 = new LookupRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcxNjYiLCJuYmYiOjE2MzA1NjMwNjksImV4cCI6MTYzMDU5OTA2OSwiaWF0IjoxNjMwNTYzMDY5fQ.R6kpvHymtlUGGmtVstHRyqxioAL0rLuKTV2gik9G0KE", "https://t3-services.tourvisio.com/v2/");
+                LookupRepository lookup1 = new LookupRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcyNDAiLCJuYmYiOjE2MzA2NDk0MTAsImV4cCI6MTYzMDY4NTQxMCwiaWF0IjoxNjMwNjQ5NDEwfQ.uYVMP4EBWiFbOa6mETjLUo51DfM59WUevxDPPHHZyQM", "https://t3-services.tourvisio.com/v2/");
                 var rResponse = lookup1.GetNationalities(new GetNationalitiesRequest());
                 if (rResponse.Header.Success)
                 {
                     passForm.Nationalities = new List<mdlNationality>();
-                    foreach(var nationality in rResponse.Body.Nationalities)
+                    foreach (var nationality in rResponse.Body.Nationalities)
                     {
                         var pNationality = new mdlNationality { Name = nationality.Name, TwoLetterCode = nationality.Id, ISDCode = nationality.ISDCode };
-                        passForm.Nationalities.Add(pNationality);                    
+                        passForm.Nationalities.Add(pNationality);
                     }
+                }
+                else {
+                    flightSearchForm.Error = rResponse.Header.Messages.First().Message;
                 }
                 
                
@@ -79,11 +85,11 @@ namespace Flightb2b.Controllers
                 
             };
             
-            BookingRepository addServ = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcxNjYiLCJuYmYiOjE2MzA1NjMwNjksImV4cCI6MTYzMDU5OTA2OSwiaWF0IjoxNjMwNTYzMDY5fQ.R6kpvHymtlUGGmtVstHRyqxioAL0rLuKTV2gik9G0KE", T3_servicebase_url);
+            BookingRepository addServ = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcyNDAiLCJuYmYiOjE2MzA2NDk0MTAsImV4cCI6MTYzMDY4NTQxMCwiaWF0IjoxNjMwNjQ5NDEwfQ.uYVMP4EBWiFbOa6mETjLUo51DfM59WUevxDPPHHZyQM", T3_servicebase_url);
             var response = addServ.SetReservationInfo(prequest);
             if (!response.Header.Success)
             {
-                ViewBag.error = "Please fill the (*) spaces!";
+                passForm.Error = response.Header.Messages.First().Message;
                 return RedirectToAction("BeginTransaction", "Booking");
             }
 
@@ -101,11 +107,11 @@ namespace Flightb2b.Controllers
                 TransactionId = passForm.TransactionResponse.TransactionId,
       
             };
-            BookingRepository addServ = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcxNjYiLCJuYmYiOjE2MzA1NjMwNjksImV4cCI6MTYzMDU5OTA2OSwiaWF0IjoxNjMwNTYzMDY5fQ.R6kpvHymtlUGGmtVstHRyqxioAL0rLuKTV2gik9G0KE", T3_servicebase_url);
+            BookingRepository addServ = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcyNDAiLCJuYmYiOjE2MzA2NDk0MTAsImV4cCI6MTYzMDY4NTQxMCwiaWF0IjoxNjMwNjQ5NDEwfQ.uYVMP4EBWiFbOa6mETjLUo51DfM59WUevxDPPHHZyQM", T3_servicebase_url);
             var response = addServ.CommitTransaction(prequest);
             if (!response.Header.Success)
             {
-                ViewBag.error = "Reservation could not be made! Please Try Again!";
+                passForm.Error = response.Header.Messages.First().Message;
                 return RedirectToAction("BeginTransaction", "Booking");
             }
             else if (response.Header.Success)
@@ -127,11 +133,45 @@ namespace Flightb2b.Controllers
                 }
                 else {
 
-                    ViewBag.error= response1.Header.Messages;
+                    passForm.Error = response.Header.Messages.First().Message;
                 }
             }
 
             return PartialView("ReservationResult",passForm);
         }
+ 
+        [Route("Booking/GetReservationDetail/{rezNo?}")]
+         public ActionResult GetReservationDetail(string rezNo, PassengerModel passForm)
+        {
+
+            var T3_servicebase_url = "http://t3-services.tourvisio.com/v2/";
+
+      
+            var prequest = new GetReservationDetailRequest()
+            {
+               ReservationNumber= rezNo
+
+            };
+
+            BookingRepository addServ = new BookingRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcyNDAiLCJuYmYiOjE2MzA2NDk0MTAsImV4cCI6MTYzMDY4NTQxMCwiaWF0IjoxNjMwNjQ5NDEwfQ.uYVMP4EBWiFbOa6mETjLUo51DfM59WUevxDPPHHZyQM", T3_servicebase_url);
+            var response = addServ.GetReservationDetail(prequest);
+            if (response.Header.Success)
+            {
+                passForm.Travellers = response.Body.ReservationData.Travellers;
+                passForm.ReservationInfo = response.Body.ReservationData.ReservationInfo;
+                passForm.Services = response.Body.ReservationData.Services;
+            }
+            else
+            {
+
+                passForm.Error = response.Header.Messages.First().Message;
+            }
+
+            return PartialView("GetReservationDetail",passForm);
+        }
+
+
+
+
     }
 }

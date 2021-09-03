@@ -31,8 +31,9 @@ namespace Flightb2b.Models
         public List<mdlPassengerHandler> Passengers { get; set; }
         public string Culture { get; set; }
         public string Currency { get; set; }
-        public string OfferID { get; set; }
-        //public string OfferIDOut { get; set; }
+        public string OfferIDIn { get; set; }
+        public string Error { get; set; }
+        public string OfferIDOut { get; set; }
         public enmLocationType? Type { get; set; }
         public IEnumerable<mdlFlight> Flight { get; set; }
         public string Query { get; set; }
@@ -49,8 +50,8 @@ namespace Flightb2b.Models
             this.ProductType = enmProductType.Flight;
             this.Culture = "en-US";
             this.Currency = "EUR";
-            this.OfferID = "";
-            //this.OfferIDOut = "";
+            this.OfferIDIn = "";
+            this.OfferIDOut = "";
         }
 
 

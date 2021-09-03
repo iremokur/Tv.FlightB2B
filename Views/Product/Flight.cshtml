@@ -1,7 +1,7 @@
 ﻿@model Flightb2b.Models.FlightModel
-@if (ViewBag.error != null)
+@if (Model.Error != null)
 {
-    <h3 style="color:red">@ViewBag.error</h3>
+    <h3 style="color:red">@Model.Error</h3>
 }
 @{
     Layout = "../Shared/_Layout.cshtml";
@@ -29,8 +29,7 @@
     <script src="~/js/getCheckInDate.js"></script>
     <script src="~/js/getDepartureAutocomplete.js"></script>
     <link href="~/css/flight.css" rel="stylesheet" />
-
-
+    <link href="~/css/flight.css" rel="stylesheet" />
 
 </head>
 <body class="w3-light-grey">
@@ -39,7 +38,7 @@
         <div class="w3-display-container">
             <form class="form justify-content-center align-items-center">
                 <div class="w3-bar w3-light-grey">
-                    <button  type="button" class="btn btn-outline-primary" id="OW" value="1" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "1" })'"><i class="fa fa-plane margin-right"></i>Oneway</button>
+                    <button type="button" class="btn btn-outline-primary" id="OW" value="1" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "1" })'"><i class="fa fa-plane margin-right"></i>Oneway</button>
                     <button type="button" class="btn btn-outline-primary" id="RT" value="2" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "2" })'"><i class="fa fa-plane margin-right"></i>Roundtrip</button>
                     <button type="button" class="btn btn-outline-primary" id="MC" value="3" onclick="location.href='@Url.Action("ChangeServiceType", "Product", new { model = Model, type = "3" })'"><i class="fa fa-plane margin-right"></i>Multi City</button>
                 </div>
@@ -65,7 +64,7 @@
                             <div class="w3-row-padding" style="margin:0 -16px;">
                                 <div class="w3-half w3-margin-bottom">
                                     @Html.HiddenFor(Model => Model.DepartureLocation.Type, enmLocationType.Airport)
-                                    <input id="Departure" list="dep" name="@Html.NameFor(Model => Model.DepartureLocation.Name)" for="Departure" class="fa fa-plane form-control" placeholder="From" />
+                                    <input id="Departure" list="dep" name="@Html.NameFor(Model => Model.DepartureLocation.Name)" for="Departure" class="fa fa-plane form-control" placeholder="From" required />
                                     <datalist id="dep">
                                         <option id="depresultcity" title="City">  </option>
                                         <option id="depresultflight" title="Flight"></option>
@@ -73,7 +72,7 @@
                                 </div>
                                 <div class="w3-half">
                                     @Html.HiddenFor(Model => Model.ArrivalLocation.Type, enmLocationType.Airport)
-                                    <input id="Arrival" list="arr" name="@Html.NameFor(Model => Model.ArrivalLocation.Name)" for="Arrival" class="fa fa-plane form-control" placeholder="To" />
+                                    <input id="Arrival" list="arr" name="@Html.NameFor(Model => Model.ArrivalLocation.Name)" for="Arrival" class="fa fa-plane form-control" placeholder="To" required />
                                     <datalist id="arr">
                                         <option id="arrresultcity" title="City"> </option>
                                         <option id="arrresultflight" title="Flight"> </option>
@@ -83,13 +82,13 @@
                             <div class="w3-row-padding" style="margin:8px -16px;">
                                 <div class="w3-half w3-margin-bottom">
                                     <label>Departure Date</label>
-                                    <input type="date" id="checkin" name="checkin">
+                                    <input type="date" id="checkin" name="checkin" required>
                                 </div>
                                 <div class="w3-half">
                                     <label for="checkout">Return Date</label><br />
-                                    <input type="date" id="checkout" name="checkout" disabled ="@(Model.ServiceType != "2")">
+                                    <input type="date" id="checkout" name="checkout" required disabled="@(Model.ServiceType != "2")">
                                 </div>
-                                </div>
+                            </div>
                             <div class="form-group">
                                 <label><i></i> Flight Class</label>
                                 <select class="form-control" title="Flight Class">
@@ -155,7 +154,7 @@
            window.localStorage.removeItem('Token');
            window.location.href = '@Url.Action("Index", "Home")';
         });
-     
+
     </script>
 
 

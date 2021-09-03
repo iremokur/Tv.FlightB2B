@@ -3,9 +3,9 @@
 @{
     Layout = "../Shared/_Layout.cshtml";
 }
-@if (ViewBag.error != null)
+@if (Model.Error != null)
 {
-    <h3 style="color:red">@ViewBag.error</h3>
+    <h3 style="color:red">@Model.Error</h3>
 }
 
 <!DOCTYPE html>
@@ -24,18 +24,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link href="~/css/flight.css" rel="stylesheet" />
     <style>
-            .myaccordion {
-                box-shadow: 0 0 1px rgba(0,0,0,0.1);
-            }
+        .myaccordion {
+            box-shadow: 0 0 1px rgba(0,0,0,0.1);
+        }
+
             .myaccordion .card-header {
                 border-bottom-color: dodgerblue;
             }
+
             .myaccordion .btn {
                 width: 100%;
                 font-weight: bold;
                 padding: 0;
                 font-family: 'Open Sans', serif
             }
+
             .myaccordion .btn-link:hover,
             .myaccordion .btn-link:focus {
                 text-decoration: none;
@@ -60,7 +63,7 @@
             <div class="w3-display-container">
                 <div id="FlightOneway" class="w3-container w3-white w3-padding-16 myLink">
                     <div class="form justify-content-center">
-                        <form action="@Url.Action("SetReservation", "Booking")" method="post">
+                        <form action="@Url.Action("SetReservation", "Booking")" method="post" onsubmit="return check()">
                             <div id="accordion" class="myaccordion">
                                 <div class="card">
 
@@ -78,11 +81,6 @@
                                         <div class="card-header" id="headingOne">
                                             <h2 class="mb-0">
                                                 <button class="d-flex align-items-center justify-content-between btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-
-                                                    <span class="fa-stack fa-sm">
-                                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                                        <i class="fas fa-plus fa-stack-1x fa-inverse"></i>
-                                                    </span>
                                                     <h1>Passenger Information @(tempindex+1) (@Model.Travellers[tempindex].PassengerType)</h1>
                                                 </button>
                                             </h2>
@@ -117,24 +115,24 @@
                                                         </td>
                                                         <td>
                                                             <label class="control-label">Name (*)</label> <br />
-                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].Name)" required class="form-control" />
+                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].Name)" required class="form-control" id="name" />
 
                                                         </td>
 
                                                         <td>
                                                             <label class="control-label">Surname (*)</label><br />
-                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].Surname)" required class="form-control" />
+                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].Surname)" required class="form-control" id="surname" />
 
                                                         </td>
                                                         <td>
                                                             <label class="control-label"></label>BirthDate (*)<br />
-                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].BirthDate)" type="date" class="form-control" />
+                                                            <input name="@Html.NameFor(m => m.Travellers[tempindex].BirthDate)" type="date" required class="form-control" />
 
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <input id="yes" type="radio" name="IsTurkishCitizen" checked value="TurkishCitizen">Yes
+                                                            <input id="yes" type="radio" name="IsTurkishCitizen" autofocus value="TurkishCitizen">Yes
                                                             <br />
                                                             <input id="no" type="radio" name="IsTurkishCitizen" value="notTurkishCitizen">No
                                                             <br />
@@ -242,9 +240,7 @@
         </header>
     </div>
 
-    <div>
-        <a href='@Url.Action("PriceSearch", "Product")'>Back to List</a>
-    </div>
+
     <script>
         $('#logoutBtn').click(function () {
            window.localStorage.removeItem('Token');
@@ -255,6 +251,7 @@
             tables.hide();
             $('#' + $(this).val()).show();
         });
+
     </script>
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

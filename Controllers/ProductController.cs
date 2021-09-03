@@ -57,11 +57,11 @@ namespace Flightb2b.Controllers
                 prequest.Night = (flightSearchForm.CheckOut - flightSearchForm.CheckIn).Days;
             }
 
-            ProductRepository product = new ProductRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcxNjYiLCJuYmYiOjE2MzA1NjMwNjksImV4cCI6MTYzMDU5OTA2OSwiaWF0IjoxNjMwNTYzMDY5fQ.R6kpvHymtlUGGmtVstHRyqxioAL0rLuKTV2gik9G0KE", T3_servicebase_url);
+            ProductRepository product = new ProductRepository("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEQiI6IlRPVVJWSVNJTyIsIldJZCI6IjUiLCJBRyI6IkIyQiIsIkFOYW1lIjoiQjJCIEFnZW5jeSIsIk1SIjoiR0VSTUFOIiwiT0YiOiJCRVIiLCJPUCI6IlNBTiIsIlVTIjoiQjJCIiwiQVQiOiIwIiwiV1QiOiIxIiwiT0EiOiIxIiwiUEYiOiIwIiwiUFQiOlsiMiIsIjMiLCIyLDMiLCIxMiIsIjQiLCI1IiwiMSIsIjYiLCIxNCIsIjExIl0sIkRQIjoiMSIsIlRUIjoiMSIsIlVSb2xlIjpbIjEiLCIyIiwiMyIsIjYiLCI3IiwiOCJdLCJUaWQiOiIyNDcyNDAiLCJuYmYiOjE2MzA2NDk0MTAsImV4cCI6MTYzMDY4NTQxMCwiaWF0IjoxNjMwNjQ5NDEwfQ.uYVMP4EBWiFbOa6mETjLUo51DfM59WUevxDPPHHZyQM", T3_servicebase_url);
             var response = product.PriceSearch(prequest);
             if (!response.Header.Success)
             {
-                ViewBag.error = "No search results were found matching your criteria.!";
+                flightSearchForm.Error = response.Header.Messages.First().Message;
                 return RedirectToAction("Flight","Product");
             }
             if (response.Header.Success) {
